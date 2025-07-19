@@ -1,0 +1,91 @@
+Marketplace loyihasi uchun Replit AI agentiga prompt
+Assalomu alaykum! Sizga marketplace loyihasini noldan kod yozish orqali yaratish vazifasi beriladi. Loyiha sotuvchilar, blogerlar (affiliate), xaridorlar va admin paneli funksiyalarini birlashtiradi. WordPress yoki WooCommerce kabi tayyor platformalardan foydalanilmaydi. Quyidagi bo‘limlar va talablarni hisobga oling:
+Loyiha bo‘limlari
+1. Sotuvchilar kabineti
+
+Foydalanuvchi autentifikatsiyasi (ro‘yxatdan o‘tish, kirish, JWT yoki OAuth).
+Mahsulotlarni qo‘shish, tahrirlash va o‘chirish.
+Buyurtmalarni ko‘rish va boshqarish (yangi, jarayonda, yakunlangan).
+Sotuvlar bo‘yicha real vaqtda hisobotlar va statistikalar.
+Mahsulot kartochkalarini yaratish va tahrirlash (rasmlar, tavsif, narx, chegirmalar).
+
+Andoza: Uzum Market — O‘zbekiston bozoriga moslashgan, qulay kabinet, real vaqtda hisobotlar.
+2. Blogerlar uchun affiliate bo‘limi
+
+Foydalanuvchi autentifikatsiyasi.
+Har bir mahsulot uchun alohida affiliate ssilka generatsiyasi.
+Sotuvlar va komissiyalarni (20% gacha) real vaqtda kuzatish.
+Mahsulot harakati, sotuvlar va qoldiqlar bo‘yicha to‘liq tahlil va hisobotlar.
+Ijtimoiy tarmoqlarda reklama qilish uchun materiallar (bannerlar, tayyor matnlar).
+
+Andoza: Uzum Market CPA — 20% gacha komissiya, real vaqtda tahlillar, reklama materiallari.
+3. Admin paneli
+
+Sotuvchilar va blogerlarni boshqarish (tasdiqlash, bloklash, faollikni kuzatish).
+Ombor boshqaruvi (mahsulot qoldiqlari, harakatlar).
+Logistika boshqaruvi (yetkazib berish, qaytarish, holatni kuzatish).
+Tizimning umumiy hisobotlari va monitoringi.
+
+Andoza: Yandex Market — markazlashtirilgan boshqaruv, ombor va logistika integratsiyasi.
+4. Xaridorlar uchun interfeys
+
+Mahsulotlarni ko‘rish, qidirish va filtrlash (kategoriya, narx, chegirmalar).
+Savatga qo‘shish va buyurtma berish.
+To‘lov integratsiyasi (Click, Payme yoki boshqa mahalliy to‘lov tizimlari).
+Buyurtma holatini kuzatish.
+
+Andoza: Noon — sodda va intuitiv interfeys, qulay qidiruv va to‘lov jarayonlari.
+Texnik talablar
+
+Backend: Node.js (Express.js) yoki Python (Django/Flask) bilan REST API qurish. Ma'lumotlar bazasi uchun MongoDB yoki PostgreSQL.
+Frontend: React yoki Vue.js bilan SPA (Single Page Application) qurish. Tailwind CSS bilan zamonaviy dizayn.
+Autentifikatsiya: JWT yoki OAuth 2.0.
+To‘lov integratsiyasi: Click, Payme yoki boshqa mahalliy to‘lov tizimlari API’lari.
+Logistika: Mahalliy yetkazib berish xizmatlari bilan integratsiya (masalan, Uzum Marketning logistika tizimi kabi).
+Analytics: Sotuvlar va bloger faoliyatini kuzatish uchun maxsus tahlil moduli.
+
+Ish tartibi
+Loyihani noldan qurish uchun quyidagi bosqichlarda ishlang:
+
+Backend sozlash:
+REST API arxitekturasini loyihalash (endpoints: /auth, /products, /orders, /affiliates, /admin).
+Ma'lumotlar bazasi sxemasini yaratish (foydalanuvchilar, mahsulotlar, buyurtmalar, affiliate ssilkalar, ombor).
+Autentifikatsiya tizimini o‘rnatish (JWT yoki OAuth).
+
+
+Frontend sozlash:
+Xaridorlar uchun asosiy interfeys (mahsulotlar ro‘yxati, savat, to‘lov).
+Sotuvchilar uchun kabinet (mahsulot boshqaruvi, hisobotlar).
+Blogerlar uchun kabinet (ssilka generatsiyasi, tahlillar).
+Admin paneli (boshqaruv va monitoring).
+
+
+Integratsiyalar:
+To‘lov tizimlari (Click, Payme).
+Logistika API (mahalliy yetkazib berish xizmatlari).
+Analytics moduli (sotuvlar va bloger faoliyatini kuzatish).
+
+
+Test va optimallashtirish:
+Har bir bo‘limni alohida sinovdan o‘tkazish.
+Tizimning ishlash tezligini optimallashtirish.
+Foydalanuvchi tajribasini yaxshilash (Noon kabi sodda dizayn).
+
+
+
+AI agentdan kutilayotgan yordam
+
+Loyihani noldan qurish uchun to‘liq kod yozing (backend va frontend).
+Har bir bo‘lim uchun alohida modullar yarating.
+Kodni sinovdan o‘tkazish uchun testlar qo‘shing.
+Uzum Market (sotuvchilar va affiliate), Yandex Market (admin paneli) va Noon (xaridor interfeysi) dan ilhomlanib, premium funksionallik taqdim eting.
+Kodlar to‘liq ishlaydigan, xatosiz va optimallashtirilgan bo‘lishi kerak.
+
+Andozalar
+
+Sotuvchilar kabineti: Uzum Market — qulay boshqaruv, real vaqtda hisobotlar.
+Affiliate bo‘limi: Uzum Market CPA — 20% gacha komissiya, reklama materiallari.
+Admin paneli: Yandex Market — markazlashtirilgan boshqaruv, logistika integratsiyasi.
+Xaridor interfeysi: Noon — intuitiv dizayn, qulay qidiruv va to‘lov.
+
+Loyihani Replit platformasida, Node.js (Express.js) yoki Python (Django/Flask) va React bilan quring. Har bir bosqich uchun kod, sozlash va test jarayonlarida yordam bering. Tizim O‘zbekiston bozoriga mos bo‘lishi va premium funksionallik taqdim etishi kerak.

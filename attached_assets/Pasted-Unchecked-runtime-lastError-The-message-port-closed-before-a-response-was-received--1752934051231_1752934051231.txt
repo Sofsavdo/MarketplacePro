@@ -1,0 +1,65 @@
+Unchecked runtime.lastError: The message port closed before a response was received.Пояснение к ошибке
+_app-f10df38f71c1285f.js:38 
+      /////////////////////
+   ///////////////////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////        Curious and driven?
+  ///////////////@@@@@@@///////        Work with us!
+  ///////////////@@@@@@@///////
+  ///////////////@@@@@@@///////        https://join.replit.com/hack.with.us
+  ////////@@@@@@@//////////////
+  ////////@@@@@@@//////////////
+  ////////@@@@@@#//////////////
+   ///////////////////////////
+      /////////////////////
+      
+6[Intervention] Slow network is detected. See <URL> for more details. Fallback font will be used while loading: <URL>
+analytics.tiktok.com/i18n/pixel/events.js?sdkid=D004GE3C77U8PIVDSDJG&lib=ttq:1  Failed to load resource: net::ERR_CONNECTION_CLOSEDПояснение к ошибке
+/~:1 Banner not shown: beforeinstallpromptevent.preventDefault() called. The page must call beforeinstallpromptevent.prompt() to show the banner.
+9Error while parsing the 'sandbox' attribute: 'allow-downloads-without-user-activation' is an invalid sandbox flag.Пояснение к ошибке
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'ambient-light-sensor'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'battery'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'execution-while-not-rendered'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'execution-while-out-of-viewport'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'layout-animations'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'legacy-image-formats'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'navigation-override'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'oversized-images'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'publickey-credentials'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'speaker-selection'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'unoptimized-images'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'unsized-media'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Unrecognized feature: 'pointer-lock'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Allow attribute will take precedence over 'allowfullscreen'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+framework-d6ce62f547324137.js:1 Allow attribute will take precedence over 'allowpaymentrequest'.
+_ @ framework-d6ce62f547324137.js:1Пояснение к предупреждению
+logs.browser-intake-us5-datadoghq.com/api/v2/logs?ddsource=browser&ddtags=sdk_version%3A4.46.0%2Capi%3Afetch%2Cenv%3Aproduction%2Cservice%3Awebsite%2Cversion%3A1a67f49f&dd-api-key=pub31a5047a3a4692afb84a423db984dc57&dd-evp-origin-version=4.46.0&dd-evp-origin=browser&dd-request-id=0de3d6ea-c6aa-4453-bfb9-6d4475c61b5b:1  Failed to load resource: net::ERR_CONNECTION_CLOSEDПояснение к ошибке
+workspace_iframe.html:32 Unrecognized feature: 'ambient-light-sensor'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'battery'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-not-rendered'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'execution-while-out-of-viewport'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'layout-animations'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'legacy-image-formats'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'navigation-override'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'oversized-images'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'publickey-credentials'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'speaker-selection'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'unoptimized-images'.Пояснение к предупреждению
+workspace_iframe.html:32 Unrecognized feature: 'unsized-media'.Пояснение к предупреждению
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowfullscreen'.Пояснение к предупреждению
+workspace_iframe.html:32 Allow attribute will take precedence over 'allowpaymentrequest'.
