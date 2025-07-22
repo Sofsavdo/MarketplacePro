@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "search": "Mahsulotlarni qidiring...",
+    "categories": "Kategoriyalar",
+    "becomeSeller": "Sotuvchi bo'ling",
+    "becomePartner": "Hamkor bo'ling"
+  },
+  "home": {
+    "heroTitle": "Premium Elektronika",
+    "heroSubtitle": "50% gacha chegirma - cheklangan vaqt!",
+    "shopNow": "Hoziroq xarid qiling",
+    "newSmartphones": "Yangi Smartfonlar",
+    "latestModels": "Eng so'ngi modellar - tez yetkazib berish",
+    "freeDelivery": "Bepul Yetkazib Berish",
+    "freeDeliveryDesc": "100,000 so'm dan yuqori xaridlarga",
+    "popularProducts": "Ommabop mahsulotlar",
+    "newProducts": "Yangi mahsulotlar",
+    "viewAll": "Barchasini ko'rish"
+  },
+  "product": {
+    "addToCart": "Savatga qo'shish",
+    "fastDelivery": "Tez yetkazib berish",
+    "freeDelivery": "Bepul yetkazib berish",
+    "standardDelivery": "Standart yetkazib berish",
+    "reviews": "sharh",
+    "discount": "chegirma"
+  },
+  "categories": {
+    "electronics": "Elektronika",
+    "clothing": "Kiyim",
+    "home": "Uy-joy",
+    "sports": "Sport",
+    "beauty": "Go'zallik",
+    "books": "Kitoblar",
+    "auto": "Avtotovarlar",
+    "games": "O'yinlar",
+    "kids": "Bolalar",
+    "other": "Boshqa"
+  },
+  "footer": {
+    "description": "O'zbekistonning eng yirik onlayn do'koni. Sifatli mahsulotlar, tez yetkazib berish va a'lo xizmat.",
+    "quickLinks": "Tezkor havolalar",
+    "about": "Biz haqimizda",
+    "delivery": "Yetkazib berish",
+    "paymentMethods": "To'lov usullari",
+    "warranty": "Kafolat",
+    "returns": "Qaytarish",
+    "customerService": "Mijozlar xizmati",
+    "helpCenter": "Yordam markazi",
+    "contact": "Aloqa",
+    "complaint": "Shikoyat",
+    "faq": "Savol-javob",
+    "liveChat": "Live Chat",
+    "contactInfo": "Aloqa ma'lumotlari",
+    "paymentMethodsLabel": "To'lov usullari:",
+    "copyright": "© 2024 TexnoGrand. Barcha huquqlar himoyalangan."
+  }
+}

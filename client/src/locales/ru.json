@@ -1,0 +1,58 @@
+{
+  "nav": {
+    "search": "Поиск товаров...",
+    "categories": "Категории",
+    "becomeSeller": "Стать продавцом",
+    "becomePartner": "Стать партнером"
+  },
+  "home": {
+    "heroTitle": "Премиум Электроника",
+    "heroSubtitle": "Скидки до 50% - ограниченное время!",
+    "shopNow": "Купить сейчас",
+    "newSmartphones": "Новые Смартфоны",
+    "latestModels": "Новейшие модели - быстрая доставка",
+    "freeDelivery": "Бесплатная Доставка",
+    "freeDeliveryDesc": "При покупке свыше 100,000 сум",
+    "popularProducts": "Популярные товары",
+    "newProducts": "Новые товары",
+    "viewAll": "Смотреть все"
+  },
+  "product": {
+    "addToCart": "Добавить в корзину",
+    "fastDelivery": "Быстрая доставка",
+    "freeDelivery": "Бесплатная доставка",
+    "standardDelivery": "Стандартная доставка",
+    "reviews": "отзыв",
+    "discount": "скидка"
+  },
+  "categories": {
+    "electronics": "Электроника",
+    "clothing": "Одежда",
+    "home": "Дом",
+    "sports": "Спорт",
+    "beauty": "Красота",
+    "books": "Книги",
+    "auto": "Автотовары",
+    "games": "Игры",
+    "kids": "Дети",
+    "other": "Другое"
+  },
+  "footer": {
+    "description": "Крупнейший интернет-магазин Узбекистана. Качественные товары, быстрая доставка и отличный сервис.",
+    "quickLinks": "Быстрые ссылки",
+    "about": "О нас",
+    "delivery": "Доставка",
+    "paymentMethods": "Способы оплаты",
+    "warranty": "Гарантия",
+    "returns": "Возврат",
+    "customerService": "Служба поддержки",
+    "helpCenter": "Центр помощи",
+    "contact": "Контакты",
+    "complaint": "Жалоба",
+    "faq": "Вопросы и ответы",
+    "liveChat": "Live Chat",
+    "contactInfo": "Контактная информация",
+    "paymentMethodsLabel": "Способы оплаты:",
+    "copyright": "© 2024 TexnoGrand. Все права защищены."
+  }
+}
