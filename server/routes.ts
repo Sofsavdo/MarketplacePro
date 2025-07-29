@@ -1,9 +1,18 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertProductSchema, insertCartItemSchema, insertOrderSchema, insertReviewSchema } from "@shared/schema";
+import { 
+  insertUserSchema, 
+  insertProductSchema, 
+  insertCartItemSchema, 
+  insertOrderSchema, 
+  insertReviewSchema,
+  insertAffiliateLinkSchema,
+  insertAffiliateCampaignSchema
+} from "@shared/schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 
 const JWT_SECRET = process.env.JWT_SECRET || "texnogrand_secret_key_2024";
 
@@ -32,6 +41,16 @@ const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextF
   });
 };
 
+// Role-based authorization middleware
+const authorizeRole = (roles: string[]) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Insufficient permissions' });
+    }
+    next();
+  };
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.post("/api/auth/register", async (req, res) => {
@@ -47,9 +66,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Hash password
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       
+      // Generate referral code
+      const referralCode = nanoid(8);
+      
       const user = await storage.createUser({
         ...userData,
         password: hashedPassword,
+        referralCode,
       });
       
       const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '24h' });
@@ -82,6 +105,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // User profile management
+  app.get("/api/profile", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const user = await storage.getUserById(req.user!.id);
+      res.json({ ...user, password: undefined });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  app.put("/api/profile", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { firstName, lastName, phone, avatar } = req.body;
+      const user = await storage.updateUser(req.user!.id, { firstName, lastName, phone, avatar });
+      res.json({ ...user, password: undefined });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update profile" });
+    }
+  });
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
@@ -95,12 +138,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Products
   app.get("/api/products", async (req, res) => {
     try {
-      const { categoryId, search, limit, offset } = req.query;
+      const { categoryId, search, limit, offset, sort, minPrice, maxPrice, tags } = req.query;
       const filters = {
         categoryId: categoryId ? parseInt(categoryId as string) : undefined,
         search: search as string,
         limit: limit ? parseInt(limit as string) : undefined,
         offset: offset ? parseInt(offset as string) : undefined,
+        sort: sort as string,
+        minPrice: minPrice ? parseFloat(minPrice as string) : undefined,
+        maxPrice: maxPrice ? parseFloat(maxPrice as string) : undefined,
+        tags: tags ? (tags as string).split(',') : undefined,
       };
       
       const products = await storage.getProducts(filters);
@@ -137,6 +184,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/products/recommended", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const products = await storage.getRecommendedProducts(req.user!.id);
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch recommended products" });
+    }
+  });
+
   app.get("/api/products/:slug", async (req, res) => {
     try {
       const product = await storage.getProductBySlug(req.params.slug);
@@ -149,16 +205,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/products", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+  app.post("/api/products", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
     try {
       const productData = insertProductSchema.parse(req.body);
       const product = await storage.createProduct({
         ...productData,
-        sellerId: req.user!.id,
+        merchantId: req.user!.id,
       });
       res.json(product);
     } catch (error) {
       res.status(400).json({ message: "Invalid product data" });
+    }
+  });
+
+  app.put("/api/products/:id", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const product = await storage.updateProduct(parseInt(req.params.id), req.body);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to update product" });
+    }
+  });
+
+  app.delete("/api/products/:id", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const success = await storage.deleteProduct(parseInt(req.params.id));
+      if (!success) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to delete product" });
     }
   });
 
@@ -211,28 +291,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Favorites
-  app.get("/api/favorites", authenticateToken, async (req, res) => {
+  app.get("/api/favorites", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const favorites = await storage.getFavorites(req.user.id);
+      const favorites = await storage.getFavorites(req.user!.id);
       res.json(favorites);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch favorites" });
     }
   });
 
-  app.post("/api/favorites", authenticateToken, async (req, res) => {
+  app.post("/api/favorites", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
       const { productId } = req.body;
-      const success = await storage.addToFavorites(req.user.id, productId);
+      const success = await storage.addToFavorites(req.user!.id, productId);
       res.json({ success });
     } catch (error) {
       res.status(400).json({ message: "Failed to add to favorites" });
     }
   });
 
-  app.delete("/api/favorites/:productId", authenticateToken, async (req, res) => {
+  app.delete("/api/favorites/:productId", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const success = await storage.removeFromFavorites(req.user.id, parseInt(req.params.productId));
+      const success = await storage.removeFromFavorites(req.user!.id, parseInt(req.params.productId));
       res.json({ success });
     } catch (error) {
       res.status(400).json({ message: "Failed to remove from favorites" });
@@ -240,25 +320,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Orders
-  app.get("/api/orders", authenticateToken, async (req, res) => {
+  app.get("/api/orders", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
-      const orders = await storage.getOrders(req.user.id);
+      const orders = await storage.getOrders(req.user!.id);
       res.json(orders);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch orders" });
     }
   });
 
-  app.post("/api/orders", authenticateToken, async (req, res) => {
+  app.get("/api/orders/:id", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const order = await storage.getOrderById(parseInt(req.params.id));
+      if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+      }
+      res.json(order);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch order" });
+    }
+  });
+
+  app.post("/api/orders", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
       const { items, ...orderData } = req.body;
       const order = await storage.createOrder({
         ...orderData,
-        userId: req.user.id,
+        userId: req.user!.id,
       }, items);
       
       // Clear cart after order creation
-      await storage.clearCart(req.user.id);
+      await storage.clearCart(req.user!.id);
       
       res.json(order);
     } catch (error) {
@@ -276,16 +368,114 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/reviews", authenticateToken, async (req, res) => {
+  app.post("/api/reviews", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
       const reviewData = insertReviewSchema.parse({
         ...req.body,
-        userId: req.user.id,
+        userId: req.user!.id,
       });
       const review = await storage.createReview(reviewData);
       res.json(review);
     } catch (error) {
       res.status(400).json({ message: "Failed to create review" });
+    }
+  });
+
+  // Affiliate Marketing Routes
+  app.get("/api/affiliate/links", authenticateToken, authorizeRole(['blogger']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const links = await storage.getAffiliateLinks(req.user!.id);
+      res.json(links);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch affiliate links" });
+    }
+  });
+
+  app.post("/api/affiliate/links", authenticateToken, authorizeRole(['blogger']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const linkData = insertAffiliateLinkSchema.parse({
+        ...req.body,
+        bloggerId: req.user!.id,
+        uniqueCode: nanoid(10),
+      });
+      const link = await storage.createAffiliateLink(linkData);
+      res.json(link);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create affiliate link" });
+    }
+  });
+
+  app.get("/api/affiliate/analytics", authenticateToken, authorizeRole(['blogger']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const analytics = await storage.getAffiliateAnalytics(req.user!.id);
+      res.json(analytics);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch affiliate analytics" });
+    }
+  });
+
+  app.get("/api/affiliate/earnings", authenticateToken, authorizeRole(['blogger']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const earnings = await storage.getAffiliateEarnings(req.user!.id);
+      res.json(earnings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch earnings" });
+    }
+  });
+
+  // Merchant Dashboard Routes
+  app.get("/api/merchant/products", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const products = await storage.getMerchantProducts(req.user!.id);
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch merchant products" });
+    }
+  });
+
+  app.get("/api/merchant/analytics", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const analytics = await storage.getMerchantAnalytics(req.user!.id);
+      res.json(analytics);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch merchant analytics" });
+    }
+  });
+
+  app.get("/api/merchant/orders", authenticateToken, authorizeRole(['merchant', 'admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const orders = await storage.getMerchantOrders(req.user!.id);
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch merchant orders" });
+    }
+  });
+
+  // Admin Routes
+  app.get("/api/admin/users", authenticateToken, authorizeRole(['admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const users = await storage.getAllUsers();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  app.put("/api/admin/users/:id/verify", authenticateToken, authorizeRole(['admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const user = await storage.verifyUser(parseInt(req.params.id));
+      res.json(user);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to verify user" });
+    }
+  });
+
+  app.get("/api/admin/analytics", authenticateToken, authorizeRole(['admin']), async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const analytics = await storage.getAdminAnalytics();
+      res.json(analytics);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch admin analytics" });
     }
   });
 
@@ -300,7 +490,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Payment endpoints
-  app.post("/api/payment/click/prepare", authenticateToken, async (req, res) => {
+  app.post("/api/payment/click/prepare", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
       const { amount, orderId } = req.body;
       // Click payment preparation logic would go here
@@ -317,7 +507,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/payment/payme/create", authenticateToken, async (req, res) => {
+  app.post("/api/payment/payme/create", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
     try {
       const { amount, orderId } = req.body;
       // Payme payment creation logic would go here
@@ -330,6 +520,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(400).json({ error: { code: -32400, message: "Payment creation failed" } });
+    }
+  });
+
+  // Withdrawal requests
+  app.post("/api/withdrawals", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const { amount, method, accountDetails } = req.body;
+      const withdrawal = await storage.createWithdrawal({
+        userId: req.user!.id,
+        amount,
+        method,
+        accountDetails,
+      });
+      res.json(withdrawal);
+    } catch (error) {
+      res.status(400).json({ message: "Failed to create withdrawal request" });
+    }
+  });
+
+  app.get("/api/withdrawals", authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+    try {
+      const withdrawals = await storage.getUserWithdrawals(req.user!.id);
+      res.json(withdrawals);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch withdrawals" });
+    }
+  });
+
+  // Analytics tracking
+  app.post("/api/analytics/track", async (req, res) => {
+    try {
+      const { event, category, action, label, value, metadata } = req.body;
+      const userId = req.headers['user-id'] ? parseInt(req.headers['user-id'] as string) : null;
+      
+      await storage.trackAnalytics({
+        userId,
+        event,
+        category,
+        action,
+        label,
+        value,
+        metadata,
+        userAgent: req.headers['user-agent'],
+        ipAddress: req.ip,
+      });
+      
+      res.json({ success: true });
+    } catch (error) {
+      res.status(400).json({ message: "Failed to track analytics" });
     }
   });
 
