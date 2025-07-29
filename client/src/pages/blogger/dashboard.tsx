@@ -122,14 +122,14 @@ export default function BloggerDashboard() {
     {
       month: "Yanvar 2024",
       earnings: "2,450,000 so'm",
-      clicks: 1,234,
+      clicks: 1234,
       conversions: 23,
       change: "+12.5%"
     },
     {
       month: "Dekabr 2023",
       earnings: "2,180,000 so'm",
-      clicks: 1,089,
+      clicks: 1089,
       conversions: 19,
       change: "+8.2%"
     },
