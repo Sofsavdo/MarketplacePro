@@ -289,52 +289,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 mt-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                  <ShoppingBag className="w-5 h-5 text-primary-600" />
-                </div>
-                <span className="text-xl font-bold">DUBAYMALL</span>
-              </div>
-              <p className="text-gray-400 text-sm">
-                Premium mahsulotlar va tez yetkazib berish
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Kompaniya</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/about" className="hover:text-white">Biz haqimizda</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Aloqa</Link></li>
-                <li><Link href="/careers" className="hover:text-white">Karyera</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Yordam</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
-                <li><Link href="/delivery" className="hover:text-white">Yetkazib berish</Link></li>
-                <li><Link href="/return" className="hover:text-white">Qaytarish</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">Aloqa</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>+998 90 123 45 67</li>
-                <li>support@dubaymall.uz</li>
-                <li>@dubaymall</li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 DUBAYMALL. Barcha huquqlar himoyalangan.</p>
-          </div>
-        </div>
-      </footer>
-
       {/* Seller Modal */}
       {showSellerModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setShowSellerModal(false)}>
