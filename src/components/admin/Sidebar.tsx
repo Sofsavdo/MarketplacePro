@@ -12,18 +12,25 @@ import {
   Settings,
   Warehouse,
   BarChart3,
-  ShoppingBag
+  ShoppingBag,
+  Image,
+  Tag,
+  Folder,
+  Brain,
+  Eye
 } from 'lucide-react'
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/admin/dashboard' },
   { icon: Package, label: 'Mahsulotlar', href: '/admin/products' },
+  { icon: Folder, label: 'Kategoriyalar', href: '/admin/categories' },
   { icon: ShoppingCart, label: 'Buyurtmalar', href: '/admin/orders' },
-  { icon: Users, label: 'Sotuvchilar', href: '/admin/sellers' },
-  { icon: TrendingUp, label: 'Blogerlar', href: '/admin/bloggers' },
+  { icon: Users, label: 'Foydalanuvchilar', href: '/admin/users' },
+  { icon: Image, label: 'Bannerlar', href: '/admin/banners' },
+  { icon: Tag, label: 'Promo Kodlar', href: '/admin/promos' },
+  { icon: Brain, label: 'AI Sozlamalari', href: '/admin/ai-settings' },
   { icon: Warehouse, label: 'Ombor', href: '/admin/warehouse' },
-  { icon: DollarSign, label: 'Moliya', href: '/admin/finance' },
-  { icon: BarChart3, label: 'Hisobotlar', href: '/admin/reports' },
+  { icon: Eye, label: 'Monitoring', href: '/admin/monitoring' },
   { icon: Settings, label: 'Sozlamalar', href: '/admin/settings' },
 ]
 
