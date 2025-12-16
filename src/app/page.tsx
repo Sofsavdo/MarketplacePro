@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { ShoppingBag, Search, ShoppingCart, User, TrendingUp, Store, X, Heart, MapPin, ChevronRight } from 'lucide-react'
+import { TrendingUp, Store, X, Heart, MapPin, ChevronRight, ShoppingBag } from 'lucide-react'
 import { useCartStore } from '@/store/cart'
+import MainLayout from '@/components/layout/MainLayout'
 
 export default function HomePage() {
   const [showSellerModal, setShowSellerModal] = useState(false)
@@ -85,87 +86,38 @@ export default function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Bar */}
-      <div className="bg-white border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-2 text-sm">
-            <div className="flex items-center gap-6">
-              <button className="flex items-center gap-1 text-gray-600 hover:text-primary-600">
-                <MapPin className="w-4 h-4" />
-                <span>Toshkent</span>
-              </button>
-              <Link href="/delivery" className="text-gray-600 hover:text-primary-600">
-                Yetkazib berish
-              </Link>
-            </div>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setShowBloggerModal(true)}
-                className="text-gold-600 hover:text-gold-700 font-medium"
-              >
-                Bloger bo'lish
-              </button>
-              <button
-                onClick={() => setShowSellerModal(true)}
-                className="text-primary-600 hover:text-primary-700 font-medium"
-              >
-                Sotuvchi bo'lish
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Header */}
-      <header className="bg-white sticky top-0 z-40 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-8">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-xl flex items-center justify-center">
-                <ShoppingBag className="w-6 h-6 text-white" />
+    <MainLayout>
+      <div className="bg-gray-50">
+        {/* Top Bar */}
+        <div className="bg-white border-b">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between py-2 text-sm">
+              <div className="flex items-center gap-6">
+                <button className="flex items-center gap-1 text-gray-600 hover:text-primary-600">
+                  <MapPin className="w-4 h-4" />
+                  <span>Toshkent</span>
+                </button>
+                <Link href="/delivery" className="text-gray-600 hover:text-primary-600">
+                  Yetkazib berish
+                </Link>
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-gold-500 bg-clip-text text-transparent">
-                DUBAYMALL
-              </span>
-            </Link>
-
-            {/* Search */}
-            <div className="flex-1 max-w-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Mahsulotlar va turkumlar bo'yicha qidirish"
-                  className="w-full pl-4 pr-12 py-3 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition"
-                />
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition">
-                  <Search className="w-5 h-5" />
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={() => setShowBloggerModal(true)}
+                  className="text-gold-600 hover:text-gold-700 font-medium"
+                >
+                  Bloger bo'lish
+                </button>
+                <button
+                  onClick={() => setShowSellerModal(true)}
+                  className="text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Sotuvchi bo'lish
                 </button>
               </div>
             </div>
-
-            {/* Actions */}
-            <div className="flex items-center gap-6">
-              <Link href="/login" className="flex flex-col items-center gap-1 text-gray-700 hover:text-primary-600 transition">
-                <User className="w-6 h-6" />
-                <span className="text-xs">Kirish</span>
-              </Link>
-              <Link href="/favorites" className="flex flex-col items-center gap-1 text-gray-700 hover:text-primary-600 transition relative">
-                <Heart className="w-6 h-6" />
-                <span className="text-xs">Sevimli</span>
-              </Link>
-              <Link href="/cart" className="flex flex-col items-center gap-1 text-gray-700 hover:text-primary-600 transition relative">
-                <ShoppingCart className="w-6 h-6" />
-                <span className="text-xs">Savat</span>
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  0
-                </span>
-              </Link>
-            </div>
           </div>
         </div>
-      </header>
 
       {/* Categories */}
       <section className="bg-white border-b">
@@ -478,6 +430,7 @@ export default function HomePage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </MainLayout>
   )
 }
