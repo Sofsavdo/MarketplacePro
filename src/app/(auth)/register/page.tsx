@@ -4,6 +4,7 @@ import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Mail, Lock, User, Phone, Eye, EyeOff, Building, Users, TrendingUp } from 'lucide-react'
+import { signUpUser } from '@/lib/auth-service'
 
 type UserRole = 'customer' | 'seller' | 'blogger'
 
@@ -39,16 +40,16 @@ function RegisterForm() {
     }
 
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, role }),
+      const { user, error: signUpError } = await signUpUser({
+        email: formData.email,
+        password: formData.password,
+        full_name: formData.full_name,
+        phone: formData.phone,
+        role,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Ro\'yxatdan o\'tish xatosi')
+      if (signUpError || !user) {
+        throw new Error(signUpError || 'Ro\'yxatdan o\'tish xatosi')
       }
 
       // Redirect based on role

@@ -81,7 +81,7 @@ export default function Navbar() {
                     <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-primary-600" />
                     </div>
-                    <span className="hidden lg:block text-sm font-medium">{user?.name}</span>
+                    <span className="hidden lg:block text-sm font-medium">{user?.full_name}</span>
                   </button>
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                     <div className="p-2">

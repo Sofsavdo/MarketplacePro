@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { signInUser } from '@/lib/auth-service'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -21,20 +22,17 @@ export default function LoginPage() {
     setError('')
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const { user, error: signInError } = await signInUser({
+        email: formData.email,
+        password: formData.password,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Kirish xatosi')
+      if (signInError || !user) {
+        throw new Error(signInError || 'Kirish xatosi')
       }
 
       // Redirect based on role
-      const role = data.user.role
+      const role = user.role
       if (role === 'admin') {
         router.push('/admin/dashboard')
       } else if (role === 'seller') {

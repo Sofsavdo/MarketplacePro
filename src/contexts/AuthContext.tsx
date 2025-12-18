@@ -2,20 +2,15 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
-
-interface User {
-  id: string
-  email: string
-  name: string
-  role: 'admin' | 'seller' | 'blogger' | 'customer'
-  avatar?: string
-}
+import { getCurrentUser, signInUser, signOutUser } from '@/lib/auth-service'
+import type { User } from '@/lib/auth-service'
 
 interface AuthContextType {
   user: User | null
   loading: boolean
   login: (email: string, password: string) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
+  refreshUser: () => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -26,38 +21,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
-  useEffect(() => {
-    // Check for stored user session
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser))
-      } catch (error) {
-        localStorage.removeItem('user')
+  const loadUser = async () => {
+    try {
+      const { user: currentUser, error } = await getCurrentUser()
+      if (error) {
+        console.error('Failed to load user:', error)
+        setUser(null)
+      } else {
+        setUser(currentUser)
       }
+    } catch (error) {
+      console.error('Failed to load user:', error)
+      setUser(null)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
+  }
+
+  useEffect(() => {
+    loadUser()
   }, [])
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
+      const { user: loggedInUser, error } = await signInUser({ email, password })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed')
+      if (error || !loggedInUser) {
+        throw new Error(error || 'Login failed')
       }
 
-      setUser(data.user)
-      localStorage.setItem('user', JSON.stringify(data.user))
+      setUser(loggedInUser)
 
       // Redirect based on role
-      const role = data.user.role
+      const role = loggedInUser.role
       if (role === 'admin') {
         router.push('/admin/dashboard')
       } else if (role === 'seller') {
@@ -72,10 +68,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await signOutUser()
     setUser(null)
-    localStorage.removeItem('user')
     router.push('/login')
+  }
+
+  const refreshUser = async () => {
+    await loadUser()
   }
 
   return (
@@ -85,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         login,
         logout,
+        refreshUser,
         isAuthenticated: !!user,
       }}
     >
