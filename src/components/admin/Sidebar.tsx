@@ -31,6 +31,8 @@ const menuItems = [
   { icon: FileText, label: 'Hisobotlar', href: '/admin/reports' },
   { icon: BarChart3, label: 'Ommaviy Amallar', href: '/admin/bulk-operations' },
   { icon: TrendingUp, label: 'Ticketlar', href: '/admin/tickets' },
+  { icon: TrendingUp, label: 'Marketing', href: '/admin/marketing' },
+  { icon: TrendingUp, label: 'Faoliyat Jurnali', href: '/admin/activity-logs' },
   { icon: Image, label: 'Bannerlar', href: '/admin/banners' },
   { icon: Tag, label: 'Promo Kodlar', href: '/admin/promos' },
   { icon: Brain, label: 'AI Sozlamalari', href: '/admin/ai-settings' },
