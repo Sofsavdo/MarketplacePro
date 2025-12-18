@@ -17,7 +17,8 @@ import {
   Tag,
   Folder,
   Brain,
-  Eye
+  Eye,
+  FileText
 } from 'lucide-react'
 
 const menuItems = [
@@ -26,6 +27,8 @@ const menuItems = [
   { icon: Folder, label: 'Kategoriyalar', href: '/admin/categories' },
   { icon: ShoppingCart, label: 'Buyurtmalar', href: '/admin/orders' },
   { icon: Users, label: 'Foydalanuvchilar', href: '/admin/users' },
+  { icon: DollarSign, label: 'Moliya (ERP)', href: '/admin/finance' },
+  { icon: FileText, label: 'Hisobotlar', href: '/admin/reports' },
   { icon: Image, label: 'Bannerlar', href: '/admin/banners' },
   { icon: Tag, label: 'Promo Kodlar', href: '/admin/promos' },
   { icon: Brain, label: 'AI Sozlamalari', href: '/admin/ai-settings' },

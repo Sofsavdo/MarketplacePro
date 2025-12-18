@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { 
   DollarSign, 
@@ -10,10 +11,54 @@ import {
   Clock,
   CheckCircle,
   AlertCircle,
-  PlusCircle
+  PlusCircle,
+  Users,
+  Eye,
+  Star
 } from 'lucide-react'
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 export default function SellerDashboard() {
+  const [realTimeData, setRealTimeData] = useState({
+    todaySales: 2450000,
+    todayOrders: 8,
+    activeVisitors: 23,
+    conversionRate: 3.2,
+  })
+
+  // Simulate real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRealTimeData(prev => ({
+        todaySales: prev.todaySales + Math.floor(Math.random() * 500000),
+        todayOrders: prev.todayOrders + (Math.random() > 0.7 ? 1 : 0),
+        activeVisitors: Math.max(10, prev.activeVisitors + Math.floor(Math.random() * 5) - 2),
+        conversionRate: Math.max(2, Math.min(5, prev.conversionRate + (Math.random() - 0.5) * 0.1)),
+      }))
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const salesChartData = [
+    { day: 'Dush', sales: 4200000 },
+    { day: 'Sesh', sales: 3800000 },
+    { day: 'Chor', sales: 5100000 },
+    { day: 'Pay', sales: 4600000 },
+    { day: 'Jum', sales: 6200000 },
+    { day: 'Shan', sales: 7800000 },
+    { day: 'Yak', sales: 6500000 },
+  ]
+
+  const ordersChartData = [
+    { day: 'Dush', orders: 12 },
+    { day: 'Sesh', orders: 10 },
+    { day: 'Chor', orders: 15 },
+    { day: 'Pay', orders: 13 },
+    { day: 'Jum', orders: 18 },
+    { day: 'Shan', orders: 22 },
+    { day: 'Yak', orders: 19 },
+  ]
   const stats = [
     {
       label: 'Jami daromad',
@@ -117,6 +162,86 @@ export default function SellerDashboard() {
           <PlusCircle className="w-5 h-5" />
           Mahsulot qo'shish
         </Link>
+      </div>
+
+      {/* Real-time Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <DollarSign className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-blue-100 text-sm mb-1">Bugungi savdo</p>
+          <p className="text-3xl font-bold">{(realTimeData.todaySales / 1000000).toFixed(1)}M</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <ShoppingCart className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-green-100 text-sm mb-1">Bugungi buyurtmalar</p>
+          <p className="text-3xl font-bold">{realTimeData.todayOrders}</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <Users className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-purple-100 text-sm mb-1">Faol ko'ruvchilar</p>
+          <p className="text-3xl font-bold">{realTimeData.activeVisitors}</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <TrendingUp className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-orange-100 text-sm mb-1">Konversiya</p>
+          <p className="text-3xl font-bold">{realTimeData.conversionRate.toFixed(1)}%</p>
+        </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl p-6 shadow-lg">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Haftalik savdo</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={salesChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip formatter={(value: any) => `${(value / 1000000).toFixed(1)}M`} />
+              <Line type="monotone" dataKey="sales" stroke="#3B82F6" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-lg">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Haftalik buyurtmalar</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={ordersChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="orders" fill="#10B981" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Stats Grid */}

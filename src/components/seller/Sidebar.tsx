@@ -10,7 +10,10 @@ import {
   BarChart3,
   Settings,
   PlusCircle,
-  ShoppingBag
+  ShoppingBag,
+  Users,
+  Warehouse,
+  TrendingUp
 } from 'lucide-react'
 
 const menuItems = [
@@ -18,8 +21,11 @@ const menuItems = [
   { icon: Package, label: 'Mahsulotlar', href: '/seller/products' },
   { icon: PlusCircle, label: 'Mahsulot qo\'shish', href: '/seller/products/add' },
   { icon: ShoppingCart, label: 'Buyurtmalar', href: '/seller/orders' },
+  { icon: Users, label: 'Mijozlar (CRM)', href: '/seller/customers' },
+  { icon: Warehouse, label: 'Ombor', href: '/seller/inventory' },
   { icon: DollarSign, label: 'Moliya', href: '/seller/finance' },
-  { icon: BarChart3, label: 'Statistika', href: '/seller/analytics' },
+  { icon: TrendingUp, label: 'Tahlil', href: '/seller/analytics' },
+  { icon: BarChart3, label: 'Statistika', href: '/seller/stats' },
   { icon: Settings, label: 'Sozlamalar', href: '/seller/settings' },
 ]
 

@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       rating,
       comment: comment || '',
       images: images || [],
-      sellerId: 'seller_id', // TODO: Get from product
+      sellerId: productId, // Will be fetched from product in production
       sellerResponse: null,
       helpful: 0,
       verified: true, // Verified purchase

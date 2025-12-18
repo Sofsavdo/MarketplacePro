@@ -10,16 +10,19 @@ import {
   BarChart3,
   Settings,
   Gift,
-  ShoppingBag
+  ShoppingBag,
+  FileText,
+  Building2
 } from 'lucide-react'
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', href: '/blogger/dashboard' },
   { icon: LinkIcon, label: 'Promo kodlar', href: '/blogger/promo' },
   { icon: Package, label: 'Mahsulotlar', href: '/blogger/products' },
+  { icon: FileText, label: 'Kontent', href: '/blogger/content' },
   { icon: DollarSign, label: 'Daromadlar', href: '/blogger/earnings' },
-  { icon: BarChart3, label: 'Statistika', href: '/blogger/analytics' },
-  { icon: Gift, label: 'Kampaniyalar', href: '/blogger/campaigns' },
+  { icon: BarChart3, label: 'Statistika', href: '/blogger/stats' },
+  { icon: Building2, label: 'Kompaniya', href: '/blogger/company' },
   { icon: Settings, label: 'Sozlamalar', href: '/blogger/settings' },
 ]
 

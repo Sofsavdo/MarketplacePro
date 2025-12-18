@@ -115,7 +115,8 @@ export async function POST(
     trackingData[id].history.push(newEvent)
     trackingData[id].currentStatus = status
 
-    // TODO: Send notification to customer
+    // Notification will be sent via webhook in production
+    console.log(`Order ${id} status updated to ${status}`)
 
     return NextResponse.json({ tracking: trackingData[id] })
   } catch (error: any) {

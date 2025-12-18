@@ -61,8 +61,24 @@ export default function AdminProductsPage() {
   }
 
   const handleAIVerify = async (id: string) => {
-    alert('AI verification ishga tushirilmoqda...')
-    // TODO: Implement AI verification
+    try {
+      const response = await fetch('/api/ai/verify-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId: id }),
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
+        alert(`AI tekshiruvi: ${data.verified ? 'Tasdiqlandi' : 'Muammo topildi'}\n${data.message || ''}`)
+        fetchProducts()
+      } else {
+        alert('AI tekshiruvida xatolik')
+      }
+    } catch (error) {
+      alert('Xatolik yuz berdi')
+    }
   }
 
   return (

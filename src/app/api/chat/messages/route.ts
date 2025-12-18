@@ -101,9 +101,9 @@ export async function POST(request: NextRequest) {
 
     messages.push(newMessage)
 
-    // Notify admin if message is flagged
+    // Log flagged messages for admin review
     if (hasForbiddenContent) {
-      // TODO: Send notification to admin
+      console.log(`Flagged message from ${user.full_name}: ${message}`)
     }
 
     return NextResponse.json({ message: newMessage })
