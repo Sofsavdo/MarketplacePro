@@ -23,9 +23,17 @@ function RegisterForm() {
     phone: '',
     password: '',
     confirm_password: '',
-    company_name: '', // for seller
-    telegram_username: '', // for blogger
-    instagram_username: '', // for blogger
+    // Seller fields
+    company_name: '',
+    business_license: '',
+    tax_id: '',
+    // Blogger fields
+    youtube_channel: '',
+    youtube_followers: '',
+    instagram_username: '',
+    instagram_followers: '',
+    telegram_channel: '',
+    telegram_followers: '',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,19 +54,29 @@ function RegisterForm() {
         full_name: formData.full_name,
         phone: formData.phone,
         role,
+        // Seller data
+        company_name: role === 'seller' ? formData.company_name : undefined,
+        business_license: role === 'seller' ? formData.business_license : undefined,
+        tax_id: role === 'seller' ? formData.tax_id : undefined,
+        // Blogger data
+        youtube_channel: role === 'blogger' ? formData.youtube_channel : undefined,
+        youtube_followers: role === 'blogger' && formData.youtube_followers ? parseInt(formData.youtube_followers) : undefined,
+        instagram_username: role === 'blogger' ? formData.instagram_username : undefined,
+        instagram_followers: role === 'blogger' && formData.instagram_followers ? parseInt(formData.instagram_followers) : undefined,
+        telegram_channel: role === 'blogger' ? formData.telegram_channel : undefined,
+        telegram_followers: role === 'blogger' && formData.telegram_followers ? parseInt(formData.telegram_followers) : undefined,
       })
 
       if (signUpError || !user) {
         throw new Error(signUpError || 'Ro\'yxatdan o\'tish xatosi')
       }
 
-      // Redirect based on role
-      if (role === 'seller') {
-        router.push('/seller/dashboard')
-      } else if (role === 'blogger') {
-        router.push('/blogger/dashboard')
-      } else {
+      // Redirect based on role and status
+      if (role === 'customer') {
         router.push('/')
+      } else {
+        // Seller and blogger need approval
+        router.push('/pending-approval')
       }
     } catch (err: any) {
       setError(err.message || 'Ro\'yxatdan o\'tish xatosi')
@@ -181,51 +199,158 @@ function RegisterForm() {
           </div>
 
           {role === 'seller' && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Kompaniya nomi
-              </label>
-              <div className="relative">
-                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  required
-                  value={formData.company_name}
-                  onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="Kompaniya nomi"
-                />
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Kompaniya nomi *
+                </label>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    required
+                    value={formData.company_name}
+                    onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="Kompaniya nomi"
+                  />
+                </div>
               </div>
-            </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Biznes litsenziya raqami *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.business_license}
+                    onChange={(e) => setFormData({ ...formData, business_license: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="Litsenziya raqami"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    STIR (INN) *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.tax_id}
+                    onChange={(e) => setFormData({ ...formData, tax_id: e.target.value })}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    placeholder="STIR raqami"
+                  />
+                </div>
+              </div>
+
+              <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-800">
+                  <strong>Diqqat:</strong> Sizning ma'lumotlaringiz admin tomonidan tekshiriladi. 
+                  Tasdiqlangandan so'ng profilga kirish imkoniyati beriladi.
+                </p>
+              </div>
+            </>
           )}
 
           {role === 'blogger' && (
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Telegram kanal
-                </label>
-                <input
-                  type="text"
-                  value={formData.telegram_username}
-                  onChange={(e) => setFormData({ ...formData, telegram_username: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="@username"
-                />
+            <>
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  <strong>Talablar:</strong> Kamida 500 ta faol obunachi (YouTube, Instagram yoki Telegram)
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      YouTube kanal
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.youtube_channel}
+                      onChange={(e) => setFormData({ ...formData, youtube_channel: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="youtube.com/@kanal"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      YouTube obunachilari
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.youtube_followers}
+                      onChange={(e) => setFormData({ ...formData, youtube_followers: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="1000"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Instagram
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.instagram_username}
+                      onChange={(e) => setFormData({ ...formData, instagram_username: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="@username"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Instagram obunachilari
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.instagram_followers}
+                      onChange={(e) => setFormData({ ...formData, instagram_followers: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="1000"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Telegram kanal
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.telegram_channel}
+                      onChange={(e) => setFormData({ ...formData, telegram_channel: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="@kanal"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Telegram obunachilari
+                    </label>
+                    <input
+                      type="number"
+                      value={formData.telegram_followers}
+                      onChange={(e) => setFormData({ ...formData, telegram_followers: e.target.value })}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      placeholder="1000"
+                    />
+                  </div>
+                </div>
+
+                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Diqqat:</strong> Sizning ijtimoiy tarmoq hisoblaringiz admin tomonidan tekshiriladi. 
+                    Kamida 500 ta faol obunachi bo'lishi kerak. Tasdiqlangandan so'ng profilga kirish imkoniyati beriladi.
+                  </p>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Instagram
-                </label>
-                <input
-                  type="text"
-                  value={formData.instagram_username}
-                  onChange={(e) => setFormData({ ...formData, instagram_username: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="@username"
-                />
-              </div>
-            </div>
+            </>
           )}
 
           <div className="grid md:grid-cols-2 gap-6">

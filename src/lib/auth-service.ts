@@ -7,6 +7,17 @@ export interface SignUpData {
   full_name: string
   phone?: string
   role: 'customer' | 'seller' | 'blogger'
+  // Seller specific
+  company_name?: string
+  business_license?: string
+  tax_id?: string
+  // Blogger specific
+  youtube_channel?: string
+  youtube_followers?: number
+  instagram_username?: string
+  instagram_followers?: number
+  telegram_channel?: string
+  telegram_followers?: number
 }
 
 export interface SignInData {
@@ -23,6 +34,23 @@ export interface User {
   avatar_url?: string
   email_verified: boolean
   created_at: string
+  // Approval system
+  status: 'pending' | 'approved' | 'rejected' | 'active'
+  approved_at?: string
+  rejected_at?: string
+  rejection_reason?: string
+  // Seller specific
+  company_name?: string
+  business_license?: string
+  tax_id?: string
+  // Blogger specific
+  youtube_channel?: string
+  youtube_followers?: number
+  instagram_username?: string
+  instagram_followers?: number
+  telegram_channel?: string
+  telegram_followers?: number
+  verification_documents?: string[]
 }
 
 // Sign up new user
@@ -39,6 +67,39 @@ export async function signUpUser(data: SignUpData): Promise<{ user: User | null;
       return { user: null, error: 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak' }
     }
 
+    // Validate seller data
+    if (data.role === 'seller') {
+      if (!data.company_name || data.company_name.trim().length === 0) {
+        return { user: null, error: 'Kompaniya nomi kiritilishi shart' }
+      }
+      if (!data.business_license) {
+        return { user: null, error: 'Biznes litsenziya raqami kiritilishi shart' }
+      }
+      if (!data.tax_id) {
+        return { user: null, error: 'STIR raqami kiritilishi shart' }
+      }
+    }
+
+    // Validate blogger data
+    if (data.role === 'blogger') {
+      let totalFollowers = 0
+      
+      if (data.youtube_followers) totalFollowers += data.youtube_followers
+      if (data.instagram_followers) totalFollowers += data.instagram_followers
+      if (data.telegram_followers) totalFollowers += data.telegram_followers
+
+      if (totalFollowers < 500) {
+        return { user: null, error: 'Kamida 500 ta faol obunachi bo\'lishi kerak (YouTube, Instagram yoki Telegram)' }
+      }
+
+      if (!data.youtube_channel && !data.instagram_username && !data.telegram_channel) {
+        return { user: null, error: 'Kamida bitta ijtimoiy tarmoq hisobi kiritilishi kerak' }
+      }
+    }
+
+    // Determine initial status
+    const initialStatus = data.role === 'customer' ? 'active' : 'pending'
+
     // Check if Supabase is configured
     if (!supabase) {
       // Mock mode - create user in localStorage
@@ -50,13 +111,27 @@ export async function signUpUser(data: SignUpData): Promise<{ user: User | null;
         role: data.role,
         email_verified: false,
         created_at: new Date().toISOString(),
+        status: initialStatus,
+        company_name: data.company_name,
+        business_license: data.business_license,
+        tax_id: data.tax_id,
+        youtube_channel: data.youtube_channel,
+        youtube_followers: data.youtube_followers,
+        instagram_username: data.instagram_username,
+        instagram_followers: data.instagram_followers,
+        telegram_channel: data.telegram_channel,
+        telegram_followers: data.telegram_followers,
       }
       
       // Store in localStorage
       const users = JSON.parse(localStorage.getItem('users') || '[]')
       users.push({ ...mockUser, password: await bcrypt.hash(data.password, 10) })
       localStorage.setItem('users', JSON.stringify(users))
-      localStorage.setItem('user', JSON.stringify(mockUser))
+      
+      // Only set current user if customer (others need approval)
+      if (data.role === 'customer') {
+        localStorage.setItem('user', JSON.stringify(mockUser))
+      }
       
       return { user: mockUser, error: null }
     }
@@ -91,6 +166,16 @@ export async function signUpUser(data: SignUpData): Promise<{ user: User | null;
         full_name: data.full_name,
         phone: data.phone,
         role: data.role,
+        status: initialStatus,
+        company_name: data.company_name,
+        business_license: data.business_license,
+        tax_id: data.tax_id,
+        youtube_channel: data.youtube_channel,
+        youtube_followers: data.youtube_followers,
+        instagram_username: data.instagram_username,
+        instagram_followers: data.instagram_followers,
+        telegram_channel: data.telegram_channel,
+        telegram_followers: data.telegram_followers,
       })
       .select()
       .single()
@@ -107,6 +192,16 @@ export async function signUpUser(data: SignUpData): Promise<{ user: User | null;
       role: data.role,
       email_verified: authData.user.email_confirmed_at !== null,
       created_at: authData.user.created_at,
+      status: initialStatus,
+      company_name: data.company_name,
+      business_license: data.business_license,
+      tax_id: data.tax_id,
+      youtube_channel: data.youtube_channel,
+      youtube_followers: data.youtube_followers,
+      instagram_username: data.instagram_username,
+      instagram_followers: data.instagram_followers,
+      telegram_channel: data.telegram_channel,
+      telegram_followers: data.telegram_followers,
     }
 
     return { user, error: null }
