@@ -29,6 +29,8 @@ const menuItems = [
   { icon: Users, label: 'Foydalanuvchilar', href: '/admin/users' },
   { icon: DollarSign, label: 'Moliya (ERP)', href: '/admin/finance' },
   { icon: FileText, label: 'Hisobotlar', href: '/admin/reports' },
+  { icon: BarChart3, label: 'Ommaviy Amallar', href: '/admin/bulk-operations' },
+  { icon: TrendingUp, label: 'Ticketlar', href: '/admin/tickets' },
   { icon: Image, label: 'Bannerlar', href: '/admin/banners' },
   { icon: Tag, label: 'Promo Kodlar', href: '/admin/promos' },
   { icon: Brain, label: 'AI Sozlamalari', href: '/admin/ai-settings' },

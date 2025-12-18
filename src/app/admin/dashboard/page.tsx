@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { 
   DollarSign, 
   ShoppingCart, 
@@ -10,10 +11,52 @@ import {
   ArrowDown,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  Activity,
+  AlertTriangle,
+  Eye
 } from 'lucide-react'
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 export default function AdminDashboard() {
+  const [realTimeData, setRealTimeData] = useState({
+    todayRevenue: 12500000,
+    todayOrders: 45,
+    activeUsers: 234,
+    pendingOrders: 12,
+  })
+
+  // Real-time updates simulation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRealTimeData(prev => ({
+        todayRevenue: prev.todayRevenue + Math.floor(Math.random() * 1000000),
+        todayOrders: prev.todayOrders + (Math.random() > 0.7 ? 1 : 0),
+        activeUsers: Math.max(100, prev.activeUsers + Math.floor(Math.random() * 10) - 5),
+        pendingOrders: Math.max(0, prev.pendingOrders + Math.floor(Math.random() * 3) - 1),
+      }))
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const salesData = [
+    { day: 'Dush', revenue: 18500000, orders: 52 },
+    { day: 'Sesh', revenue: 22300000, orders: 68 },
+    { day: 'Chor', revenue: 19800000, orders: 61 },
+    { day: 'Pay', revenue: 25100000, orders: 74 },
+    { day: 'Jum', revenue: 28900000, orders: 89 },
+    { day: 'Shan', revenue: 32400000, orders: 95 },
+    { day: 'Yak', revenue: 29700000, orders: 87 },
+  ]
+
+  const categoryData = [
+    { name: 'Elektronika', value: 45, color: '#3B82F6' },
+    { name: 'Kiyim', value: 25, color: '#10B981' },
+    { name: 'Uy-ro\'zg\'or', value: 15, color: '#F59E0B' },
+    { name: 'Sport', value: 10, color: '#EF4444' },
+    { name: 'Boshqa', value: 5, color: '#8B5CF6' },
+  ]
   const stats = [
     {
       label: 'Jami daromad',
@@ -141,6 +184,97 @@ export default function AdminDashboard() {
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-600 mt-1">DUBAYMALL platformasi statistikasi</p>
+      </div>
+
+      {/* Real-time Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <DollarSign className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-green-100 text-sm mb-1">Bugungi daromad</p>
+          <p className="text-3xl font-bold">{(realTimeData.todayRevenue / 1000000).toFixed(1)}M</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <ShoppingCart className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-blue-100 text-sm mb-1">Bugungi buyurtmalar</p>
+          <p className="text-3xl font-bold">{realTimeData.todayOrders}</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <Activity className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-purple-100 text-sm mb-1">Faol foydalanuvchilar</p>
+          <p className="text-3xl font-bold">{realTimeData.activeUsers}</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 text-white shadow-lg">
+          <div className="flex items-center justify-between mb-2">
+            <AlertTriangle className="w-8 h-8 opacity-80" />
+            <div className="flex items-center space-x-1 text-sm">
+              <div className="w-2 h-2 bg-orange-300 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
+          <p className="text-orange-100 text-sm mb-1">Kutilayotgan buyurtmalar</p>
+          <p className="text-3xl font-bold">{realTimeData.pendingOrders}</p>
+        </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Haftalik savdo</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={salesData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip formatter={(value: any) => `${(value / 1000000).toFixed(1)}M`} />
+              <Legend />
+              <Line type="monotone" dataKey="revenue" stroke="#10B981" strokeWidth={2} name="Daromad" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Kategoriyalar bo'yicha</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={categoryData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {categoryData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Stats Grid */}
